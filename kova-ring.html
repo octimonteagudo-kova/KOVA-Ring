@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kova Ring — Know your body.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0A0A0A;
+  --lime: #C8FF00;
+  --lime-dim: rgba(200,255,0,0.12);
+  --lime-border: rgba(200,255,0,0.25);
+  --white: #F5F5F0;
+  --gray: rgba(245,245,240,0.5);
+  --gray-dim: rgba(245,245,240,0.15);
+  --gray-border: rgba(245,245,240,0.1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: default;
+}
+h1, h2, h3, .logo { font-family: 'Syne', sans-serif; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 48px;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 0.5px solid var(--gray-border);
+}
+.logo { font-size: 20px; font-weight: 700; letter-spacing: 4px; color: var(--white); }
+.logo span { color: var(--lime); }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a { font-size: 13px; color: var(--gray); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: var(--lime); color: var(--black);
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600;
+  padding: 10px 24px; border-radius: 99px; border: none; cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  letter-spacing: 0.02em;
+}
+.nav-cta:hover { opacity: 0.88; transform: scale(0.98); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 120px 24px 80px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,255,0,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--lime-dim); border: 0.5px solid var(--lime-border);
+  color: var(--lime); font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+  padding: 6px 16px; border-radius: 99px; margin-bottom: 32px;
+  text-transform: uppercase;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge::before { content: '●'; font-size: 7px; }
+.hero h1 {
+  font-size: clamp(48px, 8vw, 88px); font-weight: 700;
+  line-height: 1.0; letter-spacing: -2px;
+  color: var(--white); margin-bottom: 12px;
+  animation: fadeUp 0.7s ease 0.1s both;
+}
+.hero h1 em { color: var(--lime); font-style: normal; }
+.hero-tagline {
+  font-size: 18px; color: var(--gray); font-weight: 300;
+  max-width: 440px; line-height: 1.6; margin-bottom: 40px;
+  animation: fadeUp 0.7s ease 0.2s both;
+}
+.hero-btns {
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  animation: fadeUp 0.7s ease 0.3s both;
+}
+.btn-primary {
+  background: var(--lime); color: var(--black);
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 14px 32px; border-radius: 99px; border: none; cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.02em;
+}
+.btn-primary:hover { opacity: 0.88; transform: scale(0.98); }
+.btn-secondary {
+  background: transparent; color: var(--white);
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 500;
+  padding: 14px 32px; border-radius: 99px;
+  border: 0.5px solid var(--gray-dim); cursor: pointer;
+  transition: border-color 0.2s; letter-spacing: 0.02em;
+}
+.btn-secondary:hover { border-color: var(--gray); }
+
+/* RING VISUAL */
+.ring-wrap {
+  position: relative; margin: 64px auto 0;
+  width: 200px; height: 200px;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+.ring-outer {
+  width: 200px; height: 200px; border-radius: 50%;
+  border: 0.5px solid var(--lime-border);
+  display: flex; align-items: center; justify-content: center;
+  animation: spin 12s linear infinite;
+}
+.ring-mid {
+  width: 148px; height: 148px; border-radius: 50%;
+  border: 0.5px solid rgba(200,255,0,0.2);
+  display: flex; align-items: center; justify-content: center;
+}
+.ring-inner {
+  width: 96px; height: 96px; border-radius: 50%;
+  background: var(--lime-dim);
+  border: 1.5px solid var(--lime);
+  display: flex; align-items: center; justify-content: center;
+}
+.ring-core {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--lime);
+}
+.ring-dot {
+  position: absolute;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--lime);
+  top: 0; left: 50%; transform: translateX(-50%);
+}
+
+/* STATS BAR */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 0.5px solid var(--gray-border);
+  border-bottom: 0.5px solid var(--gray-border);
+}
+.stat-item {
+  padding: 32px 24px; text-align: center;
+  border-right: 0.5px solid var(--gray-border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px; font-weight: 700; color: var(--lime);
+  margin-bottom: 4px;
+}
+.stat-label { font-size: 12px; color: var(--gray); letter-spacing: 0.03em; }
+
+/* SECTIONS */
+section { padding: 100px 48px; }
+.section-tag {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--lime); margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(32px, 4vw, 48px); font-weight: 700;
+  letter-spacing: -1px; color: var(--white); margin-bottom: 16px;
+  line-height: 1.1;
+}
+.section-sub { font-size: 16px; color: var(--gray); max-width: 480px; line-height: 1.6; }
+
+/* FEATURES GRID */
+.features-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px; background: var(--gray-border); margin-top: 64px;
+  border: 0.5px solid var(--gray-border);
+}
+.feat-card {
+  background: var(--black); padding: 36px 28px;
+  transition: background 0.2s;
+}
+.feat-card:hover { background: rgba(200,255,0,0.03); }
+.feat-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  background: var(--lime-dim); border: 0.5px solid var(--lime-border);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.feat-icon svg { width: 18px; height: 18px; stroke: var(--lime); fill: none; stroke-width: 1.5; }
+.feat-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+.feat-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+/* PRODUCT SECTION */
+.product-section {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.product-img-wrap {
+  aspect-ratio: 1;
+  background: rgba(255,255,255,0.02);
+  border: 0.5px solid var(--gray-border);
+  border-radius: 24px;
+  overflow: hidden; position: relative;
+}
+.product-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(20%) contrast(1.05);
+}
+.product-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  min-height: 400px;
+}
+.product-img-placeholder svg { width: 48px; height: 48px; stroke: rgba(200,255,0,0.3); fill: none; stroke-width: 1; }
+.product-img-placeholder span { font-size: 12px; color: rgba(245,245,240,0.2); }
+.product-badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+.product-badge {
+  font-size: 11px; color: var(--gray);
+  background: rgba(255,255,255,0.05); border: 0.5px solid var(--gray-border);
+  padding: 5px 12px; border-radius: 99px;
+}
+.product-price {
+  font-family: 'Syne', sans-serif; font-size: 44px; font-weight: 700;
+  color: var(--lime); margin-bottom: 4px;
+}
+.product-price-note { font-size: 13px; color: var(--gray); margin-bottom: 32px; }
+.colors-row { display: flex; gap: 10px; align-items: center; margin-bottom: 36px; }
+.color-dot {
+  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: border-color 0.2s;
+}
+.color-dot.active { border-color: var(--lime); }
+.color-dot.black { background: #1A1A1A; border: 2px solid rgba(255,255,255,0.2); }
+.color-dot.gold { background: #C9A84C; }
+.color-dot.silver { background: #C0C0C0; }
+.colors-label { font-size: 12px; color: var(--gray); margin-left: 4px; }
+
+/* SOCIAL PROOF */
+.social-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px; margin-top: 56px;
+}
+.review-card {
+  background: rgba(255,255,255,0.03); border: 0.5px solid var(--gray-border);
+  border-radius: 16px; padding: 24px;
+  transition: border-color 0.2s;
+}
+.review-card:hover { border-color: rgba(200,255,0,0.2); }
+.review-header { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+.review-avatar {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--lime);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--black);
+  flex-shrink: 0;
+}
+.review-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: var(--white); }
+.review-handle { font-size: 12px; color: var(--gray); }
+.review-text { font-size: 13px; color: rgba(245,245,240,0.65); line-height: 1.6; margin-bottom: 14px; }
+.review-metric { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: var(--lime); }
+
+/* FAQ */
+.faq-list { margin-top: 48px; max-width: 680px; }
+.faq-item {
+  border-bottom: 0.5px solid var(--gray-border);
+  padding: 24px 0; cursor: pointer;
+}
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 500; color: var(--white);
+}
+.faq-q span { font-size: 20px; color: var(--lime); transition: transform 0.2s; }
+.faq-a { font-size: 14px; color: var(--gray); line-height: 1.7; margin-top: 12px; display: none; }
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-q span { transform: rotate(45deg); }
+
+/* CTA FINAL */
+.cta-section {
+  margin: 0 48px 80px;
+  background: var(--lime-dim); border: 0.5px solid var(--lime-border);
+  border-radius: 24px; padding: 80px 48px; text-align: center;
+}
+.cta-section h2 {
+  font-size: clamp(28px, 4vw, 48px); font-weight: 700;
+  letter-spacing: -1px; color: var(--white); margin-bottom: 16px;
+}
+.cta-section h2 span { color: var(--lime); }
+.cta-section p { font-size: 16px; color: var(--gray); margin-bottom: 36px; }
+
+/* FOOTER */
+footer {
+  padding: 32px 48px;
+  border-top: 0.5px solid var(--gray-border);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+}
+.footer-logo { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 3px; color: rgba(245,245,240,0.3); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 12px; color: rgba(245,245,240,0.3); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--white); }
+.footer-copy { font-size: 12px; color: rgba(245,245,240,0.2); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  section { padding: 64px 24px; }
+  .stats-bar { grid-template-columns: repeat(2,1fr); }
+  .stat-item:nth-child(2) { border-right: none; }
+  .product-section { grid-template-columns: 1fr; gap: 40px; }
+  .cta-section { margin: 0 24px 64px; padding: 48px 24px; }
+  footer { padding: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">KO<span>V</span>A</div>
+  <ul class="nav-links">
+    <li><a href="#features">Métricas</a></li>
+    <li><a href="#product">Producto</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('product').scrollIntoView({behavior:'smooth'})">Comprá ahora</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Nuevo en Argentina</div>
+  <h1>Tu cuerpo habla.<br><em>Kova lo escucha.</em></h1>
+  <p class="hero-tagline">El primer anillo inteligente de salud con representación local. Sueño, FC, SpO2, HRV y temperatura — en tiempo real.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('product').scrollIntoView({behavior:'smooth'})">Comprá tu Kova Ring</button>
+    <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Ver métricas →</button>
+  </div>
+  <div class="ring-wrap">
+    <div class="ring-outer">
+      <div class="ring-dot"></div>
+      <div class="ring-mid">
+        <div class="ring-inner">
+          <div class="ring-core"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <div class="stat-num">7</div>
+    <div class="stat-label">sensores activos</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-num">5ATM</div>
+    <div class="stat-label">resistente al agua</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-num">7d</div>
+    <div class="stat-label">batería</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-num">24hs</div>
+    <div class="stat-label">monitoreo continuo</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-tag reveal">Lo que mide</div>
+  <h2 class="section-title reveal">Datos reales.<br>Sin excusas.</h2>
+  <p class="section-sub reveal">Kova registra las métricas que importan para rendir más y recuperarte mejor cada día.</p>
+  <div class="features-grid reveal">
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+      </div>
+      <p class="feat-title">Sueño</p>
+      <p class="feat-desc">Fases, profundidad y score de recuperación cada mañana. Sabé si realmente descansaste.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <p class="feat-title">Frecuencia cardíaca</p>
+      <p class="feat-desc">Monitoreo continuo 24hs. En reposo, en entrenamiento y mientras dormís.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6l5 3-1 1.73-6-3.73z"/></svg>
+      </div>
+      <p class="feat-title">SpO2</p>
+      <p class="feat-desc">Saturación de oxígeno en sangre. Clave para altitud, sueño profundo y rendimiento.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <p class="feat-title">HRV</p>
+      <p class="feat-desc">Variabilidad cardíaca — el indicador más preciso de tu estado de recuperación real.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5c0 5.25-5 11-5 11S7 12.25 7 7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3c0 3.34 3 7.83 3 7.83S15 10.34 15 7a3 3 0 0 0-3-3zm0 1a2 2 0 1 1-2 2 2 2 0 0 1 2-2z"/></svg>
+      </div>
+      <p class="feat-title">Temperatura de piel</p>
+      <p class="feat-desc">Detecta variaciones que indican estrés, fatiga o cambios en tu estado físico.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <p class="feat-title">Índice de estrés</p>
+      <p class="feat-desc">Score diario combinando todas tus métricas. Sabé cuándo empujar y cuándo descansar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section id="product" style="border-top: 0.5px solid var(--gray-border);">
+  <div class="product-section">
+    <div class="product-img-wrap reveal">
+      <img 
+        src="https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=800&auto=format&fit=crop&q=80"
+        alt="Kova Ring smart ring"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <div class="product-img-placeholder" style="display:none;">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg>
+        <span>foto del producto</span>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-tag">Producto</div>
+      <h2 class="section-title" style="font-size: clamp(28px,3vw,40px);">Kova Ring</h2>
+      <p style="font-size:14px; color:var(--gray); line-height:1.7; margin-bottom:24px;">Diseño minimalista en acero inoxidable. Se usa en cualquier dedo. Liviano, discreto y resistente. Compatible con iOS y Android.</p>
+      <div class="product-badge-row">
+        <span class="product-badge">Acero inoxidable</span>
+        <span class="product-badge">IP68 / 5ATM</span>
+        <span class="product-badge">Carga magnética</span>
+        <span class="product-badge">iOS + Android</span>
+        <span class="product-badge">7 días de batería</span>
+      </div>
+      <div class="colors-row">
+        <div class="color-dot black active" onclick="setColor(this,'Negro')"></div>
+        <div class="color-dot gold" onclick="setColor(this,'Dorado')"></div>
+        <div class="color-dot silver" onclick="setColor(this,'Plateado')"></div>
+        <span class="colors-label" id="color-label">Negro</span>
+      </div>
+      <div class="product-price" id="price">$XX.XXX</div>
+      <div class="product-price-note">Envío gratis a todo el país · Garantía 12 meses · Stock limitado</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn-primary">Comprar ahora</button>
+        <button class="btn-secondary">Consultar por WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section id="reviews" style="border-top: 0.5px solid var(--gray-border);">
+  <div class="section-tag reveal">Comunidad</div>
+  <h2 class="section-title reveal">Lo que dicen los datos.</h2>
+  <p class="section-sub reveal">Usuarios reales. Métricas reales.</p>
+  <div class="social-grid">
+    <div class="review-card reveal">
+      <div class="review-header">
+        <div class="review-avatar">LG</div>
+        <div>
+          <p class="review-name">Lucas G.</p>
+          <p class="review-handle">@lucasg_fit · CrossFit</p>
+        </div>
+      </div>
+      <p class="review-text">"Dormí 7hs pero mi recuperación fue del 91%. Kova me cambió completamente cómo planifico el entrenamiento."</p>
+      <p class="review-metric">Recuperación: 91% ↑</p>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-header">
+        <div class="review-avatar">MR</div>
+        <div>
+          <p class="review-name">Maru R.</p>
+          <p class="review-handle">@maru.run · Running</p>
+        </div>
+      </div>
+      <p class="review-text">"Mi HRV subió 18 puntos en 3 semanas sólo cambiando el horario en que entreno. No lo podría haber descubierto sin Kova."</p>
+      <p class="review-metric">HRV: +18 pts en 3 semanas</p>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-header">
+        <div class="review-avatar">FP</div>
+        <div>
+          <p class="review-name">Fede P.</p>
+          <p class="review-handle">@fedepas · Natación</p>
+        </div>
+      </div>
+      <p class="review-text">"Lo uso en CrossFit, en el mar, en la ducha. Nunca me lo saco y sigue funcionando perfecto. El diseño es lo que menos esperaba que me gustara."</p>
+      <p class="review-metric">5ATM · uso diario continuo</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="border-top: 0.5px solid var(--gray-border);">
+  <div class="section-tag reveal">Preguntas frecuentes</div>
+  <h2 class="section-title reveal">Todo lo que<br>necesitás saber.</h2>
+  <div class="faq-list reveal">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Cómo funciona el anillo? <span>+</span></div>
+      <p class="faq-a">Kova Ring usa sensores ópticos y de temperatura integrados para medir tus métricas de salud en tiempo real. Se sincroniza con la app via Bluetooth y te muestra tus datos en el celular.</p>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Es compatible con mi teléfono? <span>+</span></div>
+      <p class="faq-a">Sí, la app es compatible con iOS (iPhone) y Android. Disponible para descargar gratis en App Store y Google Play.</p>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Qué talle necesito? <span>+</span></div>
+      <p class="faq-a">Incluimos un kit de talles sin costo para que pruebes cuál te queda mejor antes de usar el anillo real. Los talles van del 6 al 13.</p>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Cuánto dura la batería? <span>+</span></div>
+      <p class="faq-a">La batería dura aproximadamente 7 días con uso normal. La carga es magnética y tarda 1-2 horas en cargarse completamente.</p>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Tiene garantía? <span>+</span></div>
+      <p class="faq-a">Sí, 12 meses de garantía. Si tenés algún problema con tu anillo, nos escribís y lo resolvemos. Somos el único vendedor con soporte local en Argentina.</p>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Cómo es el envío? <span>+</span></div>
+      <p class="faq-a">Envío gratis a todo el país. Buenos Aires y GBA: 24-48hs. Interior: 3-5 días hábiles. Seguimiento en tiempo real incluido.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-section reveal">
+  <h2>¿Listo para conocer<br><span>tu cuerpo de verdad?</span></h2>
+  <p>Kova Ring. El primer anillo inteligente con representación local en Argentina.</p>
+  <button class="btn-primary" style="font-size:15px; padding:16px 40px;">Comprá tu Kova Ring</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">KOVA</div>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">WhatsApp</a>
+    <a href="#">Contacto</a>
+    <a href="#">Garantía</a>
+  </div>
+  <p class="footer-copy">© 2026 Kova Ring · Buenos Aires, Argentina</p>
+</footer>
+
+<script>
+function toggleFaq(el) {
+  el.classList.toggle('open');
+}
+function setColor(el, name) {
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('color-label').textContent = name;
+}
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
